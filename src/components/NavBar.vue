@@ -7,7 +7,7 @@
     >
       <el-menu-item style="border: none">
         <div class="headerIcon">
-          <img src="@/assets/logo.jpeg" alt="" />
+          <img src="@/assets/img/logo.jpeg" alt="" />
           <span>音乐的力量</span>
         </div>
       </el-menu-item>
@@ -15,17 +15,18 @@
       <el-menu-item index="2">我的音乐</el-menu-item>
       <el-menu-item index="3">探索MV</el-menu-item>
       <el-menu-item class="searchBar">
-        <input
+        <div>
+          <input
           placeholder="搜索音乐"
           v-model="keyword"
           @keyup.enter="searchMusic"
           class="el-input__inner"
-        />
+        >
         <i
-          class="el-icon-search"
-          style="margin-right: 10px"
+          class="el-input__icon el-icon-search"
           @click="searchMusic"
         ></i>
+        </div>
       </el-menu-item>
       <el-menu-item class="avatar">
         <div>
@@ -45,6 +46,7 @@
 
 <script>
 import { request } from "@/network/request.js";
+import { searchMusicAPI , songDetailAPI } from "@/network/index.js"
 
 export default {
   name: "NavBar",
@@ -58,30 +60,16 @@ export default {
   },
   methods: {
     searchMusic() {
-      console.log("come in");
-      request({
-        url: "/cloudsearch",
-        params: {
-          keywords: this.keyword,
-          limit: 30,
-        },
-      }).then((res) => {
-        this.list = []
+      searchMusicAPI(this.keyword).then((res) => {
+        this.list = [];
         const listT = res.data.result.songs;
-        // const idList = res.data.result.songs.al.id
-        // console.log(res);
         listT.map((n) => {
-          request({
-            url: "/song/detail",
-            params: {
-              ids: n.id,
-            },
-          }).then((res) => {
-            this.list.push(res.data.songs[0])
-            // console.log(res.data.songs[0])
+          songDetailAPI(n.id).then((res) => {
+            this.list.push(res);
+            console.log(res)
           });
         });
-        console.log(this.list)
+        // console.log(this.list);
       });
     },
   },
