@@ -1,15 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+const SearchMusic = () => import ('@/views/SearchMusic')
 
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: 
-  // },
+  {
+    //通过vue-router动态路由传值
+    path: '/search/:keyword',
+    name: 'SearchMusic',
+    component: SearchMusic
+  },
   // {
   //   path: '/about',
   //   name: 'About',

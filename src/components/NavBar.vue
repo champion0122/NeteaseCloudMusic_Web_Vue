@@ -14,7 +14,7 @@
       <el-menu-item index="1">发现音乐</el-menu-item>
       <el-menu-item index="2">我的音乐</el-menu-item>
       <el-menu-item index="3">探索MV</el-menu-item>
-      <el-menu-item class="searchBar">
+      <el-menu-item class="searchBar" index="4">
         <div>
           <input
           placeholder="搜索音乐"
@@ -35,18 +35,14 @@
         </div>
       </el-menu-item>
     </el-menu>
-    <el-table :data="list" style="width: 100%">
-      <el-table-column prop="name" label="歌曲" width="180"> </el-table-column>
-      <el-table-column prop="ar[0].name" label="艺人" width="180">
-      </el-table-column>
-      <el-table-column prop="al.name" label="专辑"> </el-table-column>
-    </el-table>
+    <router-view/>
   </div>
+  
 </template>
 
 <script>
-import { request } from "@/network/request.js";
-import { searchMusicAPI , songDetailAPI } from "@/network/index.js"
+import { SET_SEARCHKEYWORD } from "@/store/mutation-types"
+
 
 export default {
   name: "NavBar",
@@ -55,22 +51,13 @@ export default {
       keyword: "",
       activeIndex: "1",
       circleUrl: "",
-      list: [],
     };
   },
   methods: {
+    //search事件触发时,需要跳转路由并且在搜索页面create的时候触发搜索
     searchMusic() {
-      searchMusicAPI(this.keyword).then((res) => {
-        this.list = [];
-        const listT = res.data.result.songs;
-        listT.map((n) => {
-          songDetailAPI(n.id).then((res) => {
-            this.list.push(res);
-            console.log(res)
-          });
-        });
-        // console.log(this.list);
-      });
+      // this.$store.commit('SET_SEARCHKEYWORD',this.keyword)
+      this.$router.replace('/search/'+this.keyword)
     },
   },
 };

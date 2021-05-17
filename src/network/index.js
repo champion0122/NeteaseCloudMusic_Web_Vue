@@ -16,19 +16,19 @@ export const songDetailAPI = (ids) => {
           ids,
         },
       }).then((res) => {
-        // this.list.push(res.data.songs[0]);
-        let fullArtist = ''
+        const artList = []
         res.data.songs[0].ar.map(n => {
-          fullArtist = n.name + '/' + fullArtist
+          artList.push(n.name)
         })
+        let fullArtist = artList.join("/")
         const resolveInfo = {
           id: res.data.songs[0].id,
           name: res.data.songs[0].name,
-          alName: res.data.songs[0].name,
+          alName: res.data.songs[0].al.name,
           artist: res.data.songs[0].ar.length > 1 ?  fullArtist : res.data.songs[0].ar[0].name
         }
-        console.log(resolveInfo)
-        resolve(res.data.songs[0])
+        // console.log(res.data.songs[0])
+        resolve(resolveInfo)
     })
   })
 }

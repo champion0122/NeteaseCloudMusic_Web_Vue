@@ -9,7 +9,7 @@
 
 <script>
 import NavBar from "@/components/NavBar"
-import request from "@/network/request.js"
+
 
 export default {
   name: 'app',
