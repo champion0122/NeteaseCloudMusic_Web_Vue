@@ -17,8 +17,10 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# todo:
+1. avatar及登录接口
+2. 轮播图
+3. 播放器雏形
 
 
 ### 记录功能问题
