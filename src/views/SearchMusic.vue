@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     search(){
-      searchMusicAPI(this.keyword).then((res) => {
+      searchMusicAPI(keyword).then((res) => {
       this.list = [];
       const listT = res.data.result.songs;
       listT.map((n) => {

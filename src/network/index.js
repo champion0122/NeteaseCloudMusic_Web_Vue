@@ -29,6 +29,58 @@ export const songDetailAPI = (ids) => {
         }
         // console.log(res.data.songs[0])
         resolve(resolveInfo)
-    })
+    }).catch(err => reject(err))
+  })
+}
+
+export const detailAPI = (uid) => { //no need to login
+  return request({
+    url: '/user/detail',
+    params: {
+      uid
+    }
+  })
+}
+
+export const playlistAPI = (uid) => { //根据用户uid来获取其创建的歌单
+  return request({
+    url: '/user/playlist',
+    params: {
+      uid,
+      // offset: 30
+    }
+  })
+}  //返回res.data.playlist为对象数组，其中的id为歌单id
+
+
+export const playlistDetailAPI = (id) => { //传入歌单id
+  return request({
+    url: '/playlist/detail',
+
+    params:{
+      id
+    }
+  })
+}//返回res.data.playlist.trackIds为一个对象数组，其中的id为歌曲id，uid为创建者uid
+
+export const statusAPI = () => {   //need to login
+  console.log('status')
+  return request({
+    url: '/login/status'
+  })
+}
+
+export const accountAPI = () => {   //need to login
+  console.log('account')
+  return request({
+    url: '/user/account'
+  })
+}
+
+
+export const subcountAPI = () => {   //need to login
+  console.log('subcount')
+  return request({
+    url: '/user/subcount'
   })
 }
