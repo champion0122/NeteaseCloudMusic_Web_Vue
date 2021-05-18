@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="height: 900px">
   <el-aside>
     <el-menu
       class="el-menu-vertical-demo"

@@ -20,7 +20,7 @@ export default {
     }
   },
   methods: {
-    search(){
+    search(keyword){
       searchMusicAPI(keyword).then((res) => {
       this.list = [];
       const listT = res.data.result.songs;
@@ -36,12 +36,12 @@ export default {
     //利用computed监听的属性，对数据进行刷新
     nowKeyword(){
       this.keyword = this.$route.params.keyword
-      this.search()
+      this.search(this.keyword)
       return this.keyword
     }
   },
   created: function () {
-    this.search()
+    this.search(this.keyword)
   },
 };
 </script>
