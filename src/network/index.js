@@ -84,3 +84,13 @@ export const subcountAPI = () => {   //need to login
     url: '/user/subcount'
   })
 }
+
+export const personalizedAPI = () => {
+  console.log('personalized')
+  return request({
+    url: '/personalized',
+    params: {
+      limit: 30
+    }
+  })
+}

@@ -1,10 +1,18 @@
 <template>
-  <div ></div>
+  <div>
+    <recommend-list/>
+    
+  </div>
 </template>
 
 <script>
-export default {
+import RecommendList from '@/components/RecommendList'
 
+export default {
+  name: 'discover',
+  components: {
+    RecommendList
+  }
 }
 </script>
 

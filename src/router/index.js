@@ -4,10 +4,15 @@ import VueRouter from 'vue-router'
 const SearchMusic = () => import('@/views/SearchMusic')
 const MyMusic = () => import('@/views/myMusic/MyMusicDiscover')
 const MusicList = () => import('@/components/MusicList')
+const Discover = () => import('@/views/discover/Discover')
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    redirect: '/discover'
+  },
   {
     //通过vue-router动态路由传值
     path: '/search/:keyword',
@@ -16,7 +21,7 @@ const routes = [
   },
   {
     //通过vue-router动态路由传值
-    path: '/MyMusic',
+    path: '/myMusic',
     name: 'MyMusic',
     component: MyMusic,
     children: [
@@ -25,7 +30,18 @@ const routes = [
         component: MusicList
       }
     ]
+  }, {
+    path: '/discover',
+    name: 'Discover',
+    component: Discover,
+    children: [
+      {
+        path: 'MusicList/:listId',
+        component: MusicList
+      }
+    ]
   },
+
 
   // {
   //   path: '/about',
