@@ -4,18 +4,19 @@
       <nav-bar/>
       <router-view />
     </div>
+    <player-bar></player-bar>
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/NavBar"
-import MyMusicDiscover from "@/views/myMusic/MyMusicDiscover"
+import PlayerBar from "@/components/player/PlayerBar"
 
 export default {
   name: 'app',
   components: {
     NavBar,
-    MyMusicDiscover
+    PlayerBar
   },
 
 }

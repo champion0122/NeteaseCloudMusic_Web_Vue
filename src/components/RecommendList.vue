@@ -41,13 +41,13 @@ export default {
   flex-wrap: wrap;
 }
 .personalizedListItem {
-  width: 110px;
-  height: 110px;
-  margin: 10px;
+  width: 200px;
+  height: 200px;
+  margin: 15px;
 }
 .listPic {
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
   border-radius: 5px;
 }
 .personalizedListItem p{
@@ -58,5 +58,8 @@ export default {
 }
 .personalizedList {
   margin-bottom: 50px;
+  position: absolute;
+
 }
+
 </style>

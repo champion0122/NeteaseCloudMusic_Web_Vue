@@ -90,7 +90,14 @@ export const personalizedAPI = () => {
   return request({
     url: '/personalized',
     params: {
-      limit: 30
+      limit: 12
     }
+  })
+}
+
+export const bannerAPI = () => {
+  console.log('banner')
+  return request({
+    url: '/banner',
   })
 }
