@@ -25,7 +25,8 @@ export const songDetailAPI = (ids) => {
           id: res.data.songs[0].id,
           name: res.data.songs[0].name,
           alName: res.data.songs[0].al.name,
-          artist: res.data.songs[0].ar.length > 1 ?  fullArtist : res.data.songs[0].ar[0].name
+          artist: res.data.songs[0].ar.length > 1 ?  fullArtist : res.data.songs[0].ar[0].name,
+          picUrl: res.data.songs[0].al.picUrl
         }
         // console.log(res.data.songs[0])
         resolve(resolveInfo)
