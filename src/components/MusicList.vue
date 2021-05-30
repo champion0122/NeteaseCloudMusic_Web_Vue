@@ -4,7 +4,7 @@
     <ul>
       <li v-for="items,num in nameList" :key="num" @click="choosePlayList(items.id)">{{items.name}}</li>
     </ul>
-    <el-table :data="playList" style="width: 100%">
+    <el-table :data="playList" style="width: 100%" @row-click='show'>
       <el-table-column prop="name" label="歌曲" width="180"> </el-table-column>
       <el-table-column prop="artist" label="艺人" width="180">
       </el-table-column>
@@ -15,6 +15,7 @@
 
 <script>
 import { playlistDetailAPI , songDetailAPI } from "@/network/index.js"
+import {SET_SONGID} from "@/store/mutation-types"
 
 export default {
   name: 'MusicList',
@@ -34,6 +35,10 @@ export default {
     }
   },
   methods: {
+    show(row, column, event){
+      console.log(row)
+      this.$store.commit(SET_SONGID,row.id)
+    },
     showPlayListDetail(id){
       this.nameList = [],
       this.playList = [],

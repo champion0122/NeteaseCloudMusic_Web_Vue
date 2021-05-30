@@ -59,6 +59,6 @@ export default {
   position: absolute;
   left: 100px;
   right: 100px;
-  width: 1000px;
+  /* width: 1000px; */
 }
 </style>

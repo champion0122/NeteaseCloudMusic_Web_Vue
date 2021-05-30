@@ -44,6 +44,7 @@ export default {
   width: 200px;
   height: 200px;
   margin: 15px;
+  
 }
 .listPic {
   width: 180px;

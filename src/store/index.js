@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     searchKeyword: '',
-    playingId: '4871718'
+    playingId: ''
   },
   mutations,
   actions: {
