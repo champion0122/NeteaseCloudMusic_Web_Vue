@@ -14,7 +14,7 @@
       </el-menu-item>
       <el-menu-item index="/discover">发现音乐</el-menu-item>
       <el-menu-item index="/myMusic">我的音乐</el-menu-item>
-      <el-menu-item index="/">探索MV</el-menu-item>
+      <el-menu-item index="/Comments">探索MV</el-menu-item>
       <el-menu-item class="searchBar" index="/search">
         <div>
           <input

@@ -102,3 +102,14 @@ export const bannerAPI = () => {
     url: '/banner',
   })
 }
+
+export const songCommentsAPI = (id) => {
+  console.log('songComments')
+  return request({
+    url: '/comment/music',
+    params:{
+      id,
+      limit: 10
+    }
+  })
+}

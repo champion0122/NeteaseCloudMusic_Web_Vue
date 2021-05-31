@@ -2,7 +2,7 @@
 <div>
   <div class="personalizedList">
   <ul>
-    <li v-for="item,key in personalizedList" :key="key" @click="$router.push('/discover/MusicList/'+item.id)">
+    <li v-for="item,key in personalizedList" :key="key" @click="$router.push('/MusicList/'+item.id)">
       <div class="personalizedListItem">
         <img :src="item.picUrl" class="listPic" alt="">
         <p>{{item.name}}</p>

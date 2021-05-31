@@ -1,404 +1,231 @@
 // 底部播放栏组件
 <template>
   <div class="mini-player" id="mini-player">
-    <!-- 歌曲内容 -->
-    <div class="song">
-      <template v-if="hasCurrentSong">
-        <div @click="togglePlayerShow" class="img-wrap">
-          <div class="mask"></div>
-          <img v-lazy="$utils.genImgUrl(currentSong.img, 80)" class="blur" />
-          <div class="player-control">
-            <Icon :size="24" :type="playControlIcon" color="white" />
-          </div>
-        </div>
-        <div class="content">
-          <div class="top">
-            <p class="name">{{ currentSong.name }}</p>
-            <p class="split">-</p>
-            <p class="artists">{{ currentSong.artistsText }}</p>
-          </div>
-          <div class="time">
-            <span class="played-time">{{
-              $utils.formatTime(0)
-            }}</span>
-            <span class="split">/</span>
-            <span class="total-time">{{
-              $utils.formatTime(currentSong.duration / 1000)
-            }}</span>
-          </div>
-        </div>
-      </template>
-    </div>
-    <!-- 控制台 -->
-    <div class="control">
-      <Icon :size="24" @click="prev" class="icon" type="prev" />
-      <el-popover
-        :value="isPlayErrorPromptShow"
-        placement="top"
-        trigger="manual"
-        width="160"
-      >
-        <p>请点击开始播放。</p>
-        <div @click="togglePlaying" class="play-icon" slot="reference">
-          <Icon :size="24" :type="playIcon" />
-        </div>
-      </el-popover>
-
-      <Icon :size="24" @click="next" class="icon" type="next" />
-    </div>
-
-    <div class="mode">
-      <Share :shareUrl="shareUrl" class="mode-item" v-show="hasCurrentSong" />
-
-      <!-- 模式 -->
-      <el-popover placement="top" trigger="hover" width="160">
-        <p>{{ playModeText }}</p>
-        <Icon
-          :size="20"
-          :type="modeIcon"
-          @click="onChangePlayMode"
-          class="mode-item"
-          slot="reference"
-        />
-      </el-popover>
-      <!-- 播放列表 -->
-      <el-popover
-        :value="isPlaylistPromptShow"
-        placement="top"
-        trigger="manual"
-        width="160"
-      >
-        <p>已更新歌单</p>
-        <Icon
-          :size="20"
-          @click="togglePlaylistShow"
-          class="mode-item"
-          slot="reference"
-          type="playlist"
-        />
-      </el-popover>
-      <!-- 音量 -->
-      <div class="volume-item">
-        <Volume :volume="volume" @volumeChange="onVolumeChange" />
+    <div class="app">
+    <div class="dialogDetailAudio" onselectstart="return false">
+      <img class="dialogAudioPlay" :src="audioImg" title="播控" @click="playAudio">
+      <span class="dialogAudioTime">{{time}}</span>
+      <div class="dialogAudioProgress" ref="dialogAudioProgress" @mousedown="controlAudioProgress($event)">
+        <span class="progressDot" :style="dotStyle"></span>
+        <span class="bar" :style="progressStyle"></span>
       </div>
-      <!-- github -->
-      <Icon :size="20" @click="goGitHub" class="mode-item" type="github" />
+      <span class="dialogAudioDuration">{{duration}}</span>
+      <img class="dialogAudioListen" :src="dialogAudioListen" title="静音" @click="listenDialogAudio">
+      <img class="dialogAudioDownload" src="./callRecordDownload.png" title="下载" @click="downloadCallRecord">
+      <audio ref="recordAudio" class="recordAudio" type="audio/mpeg" 
+        @canplay="canPlay" @timeupdate="timeUpdate" @ended="onEnded" :src="audioUrl">
+      </audio>
     </div>
-    <div class="progress-bar-wrap">
-      <ProgressBar
-        :disabled="!hasCurrentSong"
-        :percent="playedPercent"
-        @percentChange="onProgressChange"
-      />
-    </div>
-    <audio
-      :src="currentSong.url"
-      @canplay="ready"
-      @ended="end"
-      @timeupdate="updateTime"
-      ref="audio"
-    ></audio>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import {
-  mapState,
-  mapMutations,
-  mapGetters,
-  mapActions
-} from "@/store/helper/music"
-import Storage from "good-storage"
-import Share from "@/components/share"
-import { VOLUME_KEY, playModeMap, isDef } from "@/utils"
-const DEFAULT_VOLUME = 0.75
-export default {
+var app = new Vue({
+  el: ".app",
   data() {
     return {
-      isPlayErrorPromptShow: false,
-      songReady: false,
-      volume: Storage.get(VOLUME_KEY, DEFAULT_VOLUME)
+      time: "00:00",
+      duration: "00:00",
+      progressStyle: { width: "" },
+      dotStyle: { left: "" },
+      audioUrl: "http://file.duzhai.net/Files/Audio/2017-08/af01ab05-d112-4ad7-9cff-2cfecced5bc6.mp3",
+      audioImg: "./dialogDetailPlay.png",
+      dialogAudioListenGroup: ["./callRecordListen.png", "./quite.png"],
+      imgIndex: 0,
     }
   },
-  mounted() {
-    this.audio.volume = this.volume
-  },
-  methods: {
-    togglePlaying() {
-      if (!this.currentSong.id) {
-        return
-      }
-      this.setPlayingState(!this.playing)
-    },
-    ready() {
-      this.songReady = true
-    },
-    async play() {
-      if (this.songReady) {
-        try {
-          await this.audio.play()
-          if (this.isPlayErrorPromptShow) {
-            this.isPlayErrorPromptShow = false
-          }
-        } catch (error) {
-          // 提示用户手动播放
-          this.isPlayErrorPromptShow = true
-          this.setPlayingState(false)
-        }
-      }
-    },
-    pause() {
-      this.audio.pause()
-    },
-    updateTime(e) {
-      const time = e.target.currentTime
-      this.setCurrentTime(time)
-    },
-    prev() {
-      if (this.songReady) {
-        this.startSong(this.prevSong)
-      }
-    },
-    next() {
-      if (this.songReady) {
-        this.startSong(this.nextSong)
-      }
-    },
-    end() {
-      this.next()
-    },
-    onProgressChange(percent) {
-      this.audio.currentTime = this.currentSong.durationSecond * percent
-      this.setPlayingState(true)
-    },
-    onVolumeChange(percent) {
-      this.audio.volume = percent
-      Storage.set(VOLUME_KEY, percent)
-    },
-    onChangePlayMode() {
-      const modeKeys = Object.keys(playModeMap)
-      const currentModeIndex = modeKeys.findIndex(
-        key => playModeMap[key].code === this.playMode
-      )
-      const nextIndex = (currentModeIndex + 1) % modeKeys.length
-      const nextModeKey = modeKeys[nextIndex]
-      const nextMode = playModeMap[nextModeKey]
-      this.setPlayMode(nextMode.code)
-    },
-    togglePlaylistShow() {
-      this.setPlaylistShow(!this.isPlaylistShow)
-    },
-    togglePlayerShow() {
-      this.setPlayerShow(!this.isPlayerShow)
-    },
-    goGitHub() {
-      window.open("https://github.com/sl1673495/vue-netease-music")
-    },
-    ...mapMutations([
-      "setCurrentTime",
-      "setPlayingState",
-      "setPlayMode",
-      "setPlaylistShow",
-      "setPlayerShow"
-    ]),
-    ...mapActions(["startSong"])
-  },
-  watch: {
-    currentSong(newSong, oldSong) {
-      // 清空了歌曲
-      if (!newSong.id) {
-        this.audio.pause()
-        this.audio.currentTime = 0
-        return
-      }
-      // 单曲循环
-      if (oldSong && newSong.id === oldSong.id) {
-        this.setCurrentTime(0)
-        this.audio.currentTime = 0
-        this.play()
-        return
-      }
-      this.songReady = false
-      if (this.timer) {
-        clearTimeout(this.timer)
-      }
-      this.timer = setTimeout(() => {
-        this.play()
-      }, 1000)
-    },
-    playing(newPlaying) {
-      this.$nextTick(() => {
-        newPlaying ? this.play() : this.pause()
-      })
-    }
-  },
+
+  //计算属性 切换静音图片
   computed: {
-    hasCurrentSong() {
-      return isDef(this.currentSong.id)
-    },
-    playIcon() {
-      return this.playing ? "pause" : "play"
-    },
-    currentMode() {
-      return playModeMap[this.playMode]
-    },
-    modeIcon() {
-      return this.currentMode.icon
-    },
-    playModeText() {
-      return this.currentMode.name
-    },
-    audio() {
-      return this.$refs.audio
-    },
-    // 播放的进度百分比
-    playedPercent() {
-      const { durationSecond } = this.currentSong
-      return Math.min(this.currentTime / durationSecond, 1) || 0
-    },
-    playControlIcon() {
-      return this.isPlayerShow ? "shrink" : "open"
-    },
-    shareUrl() {
-      return `${window.location.origin}?shareMusicId=${this.currentSong.id}`
-    },
-    ...mapState([
-      "currentSong",
-      "currentTime",
-      "playing",
-      "playMode",
-      "isPlaylistShow",
-      "isPlaylistPromptShow",
-      "isPlayerShow"
-    ]),
-    ...mapGetters(["prevSong", "nextSong"])
+    dialogAudioListen() {
+      return this.dialogAudioListenGroup[this.imgIndex]
+    }
   },
-  components: { Share }
+
+  methods: {
+    //播放暂停控制
+    playAudio() {
+      let recordAudio = this.$refs.recordAudio; //获取audio元素
+      if (recordAudio.paused) {
+        this.audioImg = "./dialogDetailPause.png"
+        recordAudio.play();
+      } else {
+        this.audioImg = "./dialogDetailPlay.png"
+        recordAudio.pause();
+      }
+    },
+
+    //进度条更新
+    timeUpdate() {
+      this.duration = this.transTime(this.$refs.recordAudio.duration);
+      let timeStr = parseInt(this.$refs.recordAudio.currentTime);
+      this.time = this.transTime(timeStr);
+      let scales = this.$refs.recordAudio.currentTime / this.$refs.recordAudio.duration;
+      this.progressStyle.width = scales * 100 + '%';
+      this.dotStyle.left = scales * 100 + '%';
+    },
+
+    //播放结束
+    onEnded() {
+      this.audioImg = "./dialogDetailPlay.png";
+      this.time = "00:00";
+      this.progressStyle.width = 0;
+      this.dotStyle.left = 0;
+    },
+
+    //用户可以开始播放audio
+    canPlay() {
+      //获取audio音频文件总时长 并设置到界面并解决出现 NAN 的问题
+      this.duration = this.transTime(this.$refs.recordAudio.duration);
+    },
+
+    //静音控制
+    listenDialogAudio() {
+      this.imgIndex = (this.imgIndex + 1) % (this.dialogAudioListenGroup).length;
+      if (this.dialogAudioListen == "./quite.png") {
+        this.$refs.recordAudio.volume = 0;
+      } else {
+        this.$refs.recordAudio.volume = 1;
+      }
+    },
+
+    //鼠标点击移动播放进度
+    controlAudioProgress(event) {
+      let audio = this.$refs.recordAudio;
+      let dialogAudioProgress = this.$refs.dialogAudioProgress;
+      if (!audio.paused || audio.currentTime != 0) {
+        let pgsWidth = parseFloat(window.getComputedStyle(dialogAudioProgress, null).width.replace('px', ''));
+        let rate = event.offsetX / pgsWidth;
+        audio.currentTime = audio.duration * rate;
+        this.timeUpdate();
+      }
+    },
+
+    //下载音频
+    downloadCallRecord() {
+      console.log("下载...");
+    },
+
+    //时间转换
+    transTime(value) {
+      let time = "";
+      let h = parseInt(value / 3600);
+      value %= 3600;
+      let m = parseInt(value / 60);
+      let s = parseInt(value % 60);
+      if (h > 0) {
+        time = this.formatTime(h + ":" + m + ":" + s);
+      } else {
+        time = this.formatTime(m + ":" + s);
+      }
+      return time;
+    },
+
+    //时间格式化
+    formatTime(value) {
+      let time = "";
+      let s = value.split(':');
+      let i = 0;
+      for (; i < s.length - 1; i++) {
+        time += s[i].length == 1 ? ("0" + s[i]) : s[i];
+        time += ":";
+      }
+      time += s[i].length == 1 ? ("0" + s[i]) : s[i];
+      return time;
+    }
+  },
+})
 }
 </script>
 
 <style lang="scss" scoped>
-.mini-player {
-  position: relative;
-  position: fixed;
-  z-index: $mini-player-z-index;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  height: $mini-player-height;
-  padding: 8px 16px;
-  padding-right: 24px;
-  background: var(--body-bgcolor);
-  .song {
-    display: flex;
-    flex: 4;
-    overflow: hidden;
-    .img-wrap {
-      position: relative;
-      margin-right: 8px;
-      border-radius: 6px;
-      overflow: hidden;
-      cursor: pointer;
-      @include img-wrap(40px);
-      img {
-        &.blur {
-          filter: blur(2px);
-        }
-      }
-      .player-control {
-        @include abs-center;
-      }
-      .mask {
-        @include abs-stretch;
-        background: rgba(0, 0, 0, 0.2);
-      }
-    }
-    .content {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      .top {
-        display: flex;
-        align-items: flex-end;
-        white-space: nowrap;
-        .name {
-          color: var(--font-color-white);
-          @include text-ellipsis;
-        }
-        .split {
-          font-size: $font-size-xs;
-          margin: 0 4px;
-        }
-        .artists {
-          font-size: $font-size-xs;
-          @include text-ellipsis;
-        }
-      }
-      .time {
-        font-size: $font-size-xs;
-        color: var(--font-color-grey);
-        .split {
-          margin: 0 4px;
-        }
-      }
-    }
-  }
-  .control {
-    position: absolute;
-    height: 100%;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
-    @include flex-center();
-    .play-icon {
-      @include flex-center();
-      position: relative;
-      width: 45px;
-      height: 45px;
-      margin: 0 16px;
-      border-radius: 50%;
-      background: $theme-color;
-      cursor: pointer;
-      i {
-        color: #fff;
-      }
-      .icon-play {
-        transform: translateX(1px);
-      }
-    }
-    .icon {
-      color: $theme-color;
-    }
-  }
-  .mode {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex: 6;
-    .mode-item {
-      display: block;
-      margin-right: 16px;
-      width: 22px;
-    }
-    .volume-item {
-      margin-right: 22px;
-    }
-  }
-  .progress-bar-wrap {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -14px;
-  }
+* {
+  margin: 0;
+  padding: 0;
 }
-.icon {
-  color: var(--font-color);
+
+.dialogDetailAudio {
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 550px;
+  height: 49px;
+  line-height: 49px;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0px 5px 30px 0px rgba(29, 34, 54, 0.18);
+  border-radius: 6px;
+}
+
+.dialogAudioPlay {
+  display: inline-block;
+  position: relative;
+  top: 6px;
+  margin-left: 15px;
   cursor: pointer;
+  width: 23px;
+  height: 23px;
+}
+
+.dialogAudioTime {
+  margin-left: 11px;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(51, 51, 51, 1);
+}
+
+.dialogAudioProgress {
+  display: inline-block;
+  width: 300px;
+  height: 2px;
+  background: rgba(212, 249, 232, 1);
+  border-radius: 1px;
+  margin-left: 12px;
+  position: relative;
+}
+
+.progressDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  background-color: rgba(5, 180, 147, 1);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  cursor: pointer;
+}
+
+.bar {
+  height: 100%;
+  background: rgba(5, 180, 147, 1);
+  border-radius: 3px;
+  display: inline-block;
+  position: absolute;
+}
+
+.dialogAudioDuration {
+  margin-left: 11px;
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(34, 34, 34, 1);
+}
+
+.dialogAudioListen,
+.dialogAudioDownload {
+  width: 16px;
+  height: 13px;
+  cursor: pointer;
+}
+
+.dialogAudioListen {
+  margin-left: 8px;
+}
+
+.dialogAudioDownload {
+  margin-left: 5px;
 }
 </style>
 

@@ -4,8 +4,16 @@
     <ul>
       <li v-for="items,num in nameList" :key="num" @click="choosePlayList(items.id)">{{items.name}}</li>
     </ul>
-    <el-table :data="playList" style="width: 100%" @row-click='show'>
-      <el-table-column prop="name" label="歌曲" width="180"> </el-table-column>
+    <el-table :data="playList" style="width: 100%" @row-dblclick='show'>
+
+      <el-table-column
+      label="歌曲"
+      width="180">
+      <template slot-scope="scope">
+        <img :src="scope.row.picUrl" alt="" width="45px" height="45px">
+        <span style="margin-left: 10px;margin-bottom:20px;">{{ scope.row.name }}</span>
+      </template>
+    </el-table-column>
       <el-table-column prop="artist" label="艺人" width="180">
       </el-table-column>
       <el-table-column prop="alName" label="专辑"> </el-table-column>
@@ -58,5 +66,4 @@ export default {
 </script>
 
 <style>
-
 </style>

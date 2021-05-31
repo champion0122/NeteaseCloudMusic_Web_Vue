@@ -5,6 +5,8 @@ const SearchMusic = () => import('@/views/SearchMusic')
 const MyMusic = () => import('@/views/myMusic/MyMusicDiscover')
 const MusicList = () => import('@/components/MusicList')
 const Discover = () => import('@/views/discover/Discover')
+const Comments = () => import('@/components/Comments')
+
 
 Vue.use(VueRouter)
 
@@ -35,11 +37,18 @@ const routes = [
     name: 'Discover',
     component: Discover,
     children: [
-      {
-        path: 'MusicList/:listId',
-        component: MusicList
-      }
+      
     ]
+  },
+  {
+    path: '/MusicList/:listId',
+    name: 'MusicList',
+    component: MusicList
+  },
+  {
+    path: '/Comments',
+    name: 'Comments',
+    component: Comments
   },
 
 
