@@ -5,8 +5,8 @@
     </div>
     <div class="content">
       <p class="name">
-        <span class="alname">{{songInf.name}}</span>
-        <span class="artist"> - {{songInf.artist}}</span>
+        <span class="alname">{{songInf.name}}<span class="artist"> - {{songInf.artist}}</span></span>
+        
       </p>
       
       <p class="time">
@@ -14,22 +14,20 @@
       </p>
     </div>
     <div class="mini-player" id="mini-player">
-    <div class="app">
     <div class="dialogDetailAudio" onselectstart="return false">
       <!-- <img class="dialogAudioPlay" :src="audioImg" title="播控" @click="playAudio"> -->
       <button @click="playAudio">播控</button>
-      <span class="dialogAudioTime">{{time}}</span>
+      <!-- <span class="dialogAudioTime">{{time}}</span> -->
       <div class="dialogAudioProgress" ref="dialogAudioProgress" @mousedown="controlAudioProgress($event)">
         <span class="progressDot" :style="dotStyle"></span>
         <span class="bar" :style="progressStyle"></span>
       </div>
-      <span class="dialogAudioDuration">{{duration}}</span>
+      <!-- <span class="dialogAudioDuration">{{duration}}</span> -->
       <!-- <img class="dialogAudioListen" :src="dialogAudioListen" title="静音" @click="listenDialogAudio"> -->
       <audio ref="recordAudio" class="recordAudio" type="audio/mpeg" 
         @canplay="canPlay" @timeupdate="timeUpdate" @ended="onEnded" :src="audioUrl" autoplay>
       </audio>
     </div>
-  </div>
   </div>
   </div>
 </template>
@@ -172,22 +170,26 @@ export default {
 }
 .content {
   margin-top: 10px;
+  width: 200px;
+  white-space: nowrap;
+  /* text-overflow: ellipsis; */
 }
 
 .time{
   color: grey;
   font-size: 10px;
   margin-top: 8px;
-  margin-left: -10px;
 }
 
 .dialogDetailAudio {
   width: 550px;
-  height: 49px;
-  line-height: 49px;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 5px 30px 0px rgba(29, 34, 54, 0.18);
-  border-radius: 6px;
+  height: 60px;
+  margin-left: 120px;
+  /* line-height: 49px; */
+  /* background: rgba(255, 255, 255, 1); */
+  /* box-shadow: 0px 5px 30px 0px rgba(29, 34, 54, 0.18); */
+
+  /* border-radius: 6px; */
 }
 
 .dialogAudioPlay {
@@ -200,20 +202,15 @@ export default {
   height: 23px;
 }
 
-.dialogAudioTime {
-  margin-left: 11px;
-  font-size: 11px;
-  font-weight: 400;
-  color: rgba(51, 51, 51, 1);
-}
 
 .dialogAudioProgress {
   display: inline-block;
-  width: 300px;
+  width: 400px;
   height: 2px;
-  background: rgba(212, 249, 232, 1);
+  background: #F5F5F6;
   border-radius: 1px;
   margin-left: 12px;
+  margin-top: 30px;
   position: relative;
 }
 
@@ -223,7 +220,7 @@ export default {
   border-radius: 50%;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
-  background-color: rgba(5, 180, 147, 1);
+  background-color: #D33A30;
   position: absolute;
   left: 0;
   top: 50%;
@@ -234,7 +231,7 @@ export default {
 
 .bar {
   height: 100%;
-  background: rgba(5, 180, 147, 1);
+  background: #D33A30;
   border-radius: 3px;
   display: inline-block;
   position: absolute;
