@@ -1,17 +1,17 @@
 <template>
   <div class="bar-container">
+    <div class="bar-left" v-show="$store.state.playingId">
     <div class="playImg">
       <img :src="songInf.picUrl" alt="" style="width:40px;height:40px">
     </div>
     <div class="content">
       <p class="name">
         <span class="alname">{{songInf.name}}<span class="artist"> - {{songInf.artist}}</span></span>
-        
       </p>
-      
       <p class="time">
         <span class="dialogAudioTime">{{time}} / {{duration}}</span>
       </p>
+    </div>
     </div>
     <div class="mini-player" id="mini-player">
     <div class="dialogDetailAudio" onselectstart="return false">
@@ -146,7 +146,10 @@ export default {
   background-color: yellowgreen;
   display: flex;
 }
-.bar-container .playImg {
+.bar-left {
+  display: flex;
+}
+.playImg {
   position: relative;
   width: 50px;
   height: 60px;
@@ -159,7 +162,7 @@ export default {
   font-size: 12px;
   color: grey;
 }
-.bar-container .playImg img{
+.playImg img{
   position: absolute;
   left: 0;
   right: 0;
@@ -181,10 +184,13 @@ export default {
   margin-top: 8px;
 }
 
+.mini-player {
+  position: fixed;
+  left: 320px;
+}
 .dialogDetailAudio {
   width: 550px;
   height: 60px;
-  margin-left: 120px;
   /* line-height: 49px; */
   /* background: rgba(255, 255, 255, 1); */
   /* box-shadow: 0px 5px 30px 0px rgba(29, 34, 54, 0.18); */
