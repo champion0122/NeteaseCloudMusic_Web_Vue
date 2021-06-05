@@ -81,7 +81,7 @@ export default {
 
     //播放结束
     onEnded() {
-      this.audioImg = "./dialogDetailPlay.png";
+      // this.audioImg = "./dialogDetailPlay.png";
       this.time = "00:00";
       this.progressStyle.width = 0;
       this.dotStyle.left = 0;

@@ -1,13 +1,38 @@
 <template>
   <div class="rotate-container">
     <div class="outer">
-      <img src="@/assets/img/logo.jpeg" alt="" />
+      <img :src="picUrl" alt="" />
     </div>
+    <button @click="changeImg">!!!!</button>
   </div>
 </template>
 
 <script>
-export default {};
+import { songDetailAPI } from "@/network/index.js";
+
+export default {
+  name: 'Rotate',
+  data(){
+    return {
+      picUrl: ''
+    }
+  },
+  methods:{
+    changeImg(){
+      songDetailAPI(this.$store.state.playingId).then(
+        (res) =>  this.picUrl = res.picUrl
+      );
+    }
+  },
+  computed: {
+    // picUrl() {
+    //   console.log(2);
+    //   return songDetailAPI(this.$store.state.playingId).then(
+    //     (res) =>  res.picUrl
+    //   );
+    // },
+  }
+};
 </script>
 
 <style>
@@ -46,6 +71,6 @@ export default {};
   /* transform: rotate(360deg);
   transition:transform 2s; */
   /* 匀速 linear */
-  animation: rotate360 5s infinite linear;
+  animation: rotate360 10s infinite linear;
 }
 </style>
