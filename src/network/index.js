@@ -113,3 +113,13 @@ export const songCommentsAPI = (id) => {
     }
   })
 }
+
+export const lyricAPI = (id) => {
+  console.log('lyric')
+  return request({
+    url: '/lyric',
+    params:{
+      id
+    }
+  })
+}
