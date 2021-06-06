@@ -1,6 +1,7 @@
 <template>
 <div>
   <div class="personalizedList">
+    <h3>推荐歌单</h3>
   <ul>
     <li v-for="item,key in personalizedList" :key="key" @click="$router.push('/MusicList/'+item.id)">
       <div class="personalizedListItem">
@@ -39,12 +40,16 @@ export default {
   display: flex;
   list-style: none;
   flex-wrap: wrap;
+  
+  width: 940px;
+  /*  均匀排列每个元素 首个元素放置于起点，末尾元素放置于终点 */
+  justify-content: unsafe center; 
 }
 .personalizedListItem {
   width: 200px;
   height: 200px;
   margin: 15px;
-  
+  flex: 1 1 auto;
 }
 .listPic {
   width: 180px;
@@ -59,7 +64,6 @@ export default {
 }
 .personalizedList {
   margin-bottom: 50px;
-  position: absolute;
 
 }
 

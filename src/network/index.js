@@ -123,3 +123,12 @@ export const lyricAPI = (id) => {
     }
   })
 }
+
+export const newsongAPI = () => {
+  console.log('newsong')
+  return request({
+    url: '/personalized/newsong',
+    params:{
+    }
+  })
+}

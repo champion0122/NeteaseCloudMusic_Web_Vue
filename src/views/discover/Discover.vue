@@ -7,12 +7,14 @@
         </el-carousel-item>
       </el-carousel>
       <recommend-list />
+      <new-music />
     </div>
   </div>
 </template>
 
 <script>
 import RecommendList from "@/components/RecommendList";
+import NewMusic from "@/components/content/NewMusic";
 import { bannerAPI } from "@/network/index";
 
 export default {
@@ -24,6 +26,7 @@ export default {
   },
   components: {
     RecommendList,
+    NewMusic
   },
   created() {
     bannerAPI().then((res) => {

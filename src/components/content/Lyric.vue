@@ -81,10 +81,10 @@ export default {
         }
       }
       console.log(lyricOuter.scrollTop)
-      if(this.activeIndex > 5)
-        lyricOuter.scrollTop = (this.activeIndex - 4) * 32//实现滚动
+      if(this.activeIndex > 7)
+        lyricOuter.scrollTop = (this.activeIndex - 6) * 32//实现滚动
       }
-    , 800)
+    , 50)
     }
   }
 };
