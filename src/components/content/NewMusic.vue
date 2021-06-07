@@ -14,7 +14,7 @@
           </div>
           <div class="discribe">
             <p>{{ song.name }}</p>
-            <p>{{ artList[index] }}</p>
+            <p class="artists">{{ artList[index] }}</p>
           </div>
         </div>
       </li>
@@ -64,7 +64,7 @@ export default {
   list-style: none;
   display: flex;
   flex-flow: column wrap;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .music-outer{
@@ -75,5 +75,9 @@ export default {
   width: 50px;
   text-align: center;
   line-height: 100px;
+}
+.artists {
+  width: 250px;
+  
 }
 </style>
