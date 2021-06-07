@@ -8,6 +8,7 @@
       </el-carousel>
       <recommend-list />
       <new-music />
+      <div class="blank"></div>
     </div>
   </div>
 </template>
@@ -63,5 +64,8 @@ export default {
   left: 100px;
   right: 100px;
   /* width: 1000px; */
+}
+.blank {
+  height: 200px;
 }
 </style>
