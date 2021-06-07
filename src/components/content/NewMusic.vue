@@ -60,18 +60,20 @@ export default {
   margin: 0;
   border: 0;
   height: 600px;
-  width: 350px;
+  width: 600px;
   list-style: none;
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-flow: column wrap;
   justify-content: space-between;
 }
 
 .music-outer{
   display: flex;
+
 }
 .music-outer .order-wrap{
-  width: 10px;
+  width: 50px;
+  text-align: center;
+  line-height: 100px;
 }
 </style>

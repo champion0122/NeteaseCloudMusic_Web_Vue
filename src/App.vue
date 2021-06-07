@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div>
+    <div class="main-content">
       <nav-bar/>
       <router-view />
     </div>
@@ -23,5 +23,10 @@ export default {
 </script>
 
 <style>
-
+.main-content {
+  margin-bottom: 100px;
+}
+.blank {
+  height: 200px;
+}
 </style>

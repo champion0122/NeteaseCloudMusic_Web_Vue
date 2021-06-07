@@ -39,11 +39,10 @@ export default {
 .personalizedList ul {
   display: flex;
   list-style: none;
-  flex-wrap: wrap;
-  
+  flex-flow: row wrap;
   width: 940px;
   /*  均匀排列每个元素 首个元素放置于起点，末尾元素放置于终点 */
-  justify-content: unsafe center; 
+  justify-content: space-around; 
 }
 .personalizedListItem {
   width: 200px;
