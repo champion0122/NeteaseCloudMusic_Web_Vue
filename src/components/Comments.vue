@@ -122,6 +122,13 @@ export default {
 .avatar {
   height: 100%;
 }
+.comment-container{
+  display: flex;
+  flex-flow: row wrap;
+}
+.comment-list{
+  width: 100%;
+}
 .comment-text {
   position: absolute;
   left: 48px;
@@ -162,5 +169,8 @@ export default {
 }
 .actions {
   margin-left: 450px;
+}
+.Rotate {
+  width: 400px;
 }
 </style>

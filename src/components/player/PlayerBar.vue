@@ -1,7 +1,7 @@
 <template>
   <div class="bar-container">
     <div class="bar-left" v-show="$store.state.playingId">
-    <div class="playImg">
+    <div class="playImg" @click="showComments">
       <img :src="songInf.picUrl" alt="" style="width:40px;height:40px">
     </div>
     <div class="content">
