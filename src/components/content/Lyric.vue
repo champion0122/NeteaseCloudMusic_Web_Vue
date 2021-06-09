@@ -73,6 +73,8 @@ export default {
     changeStyle(){
       let myaudio = document.querySelector('.recordAudio')
       let lyricOuter = document.querySelector('.lyric-outer')
+      let activedP = document.getElementsByClassName('actived')[0]
+      // clearInterval(gdtimer)
       this.gdtimer = setInterval(() => {
       let second = myaudio.currentTime
       for(let i  = 0;i < this.lyric.length ;i++){
@@ -81,9 +83,13 @@ export default {
         }
       }
       console.log(lyricOuter.scrollTop)
-      if(this.activeIndex > 7)
-        lyricOuter.scrollTop = (this.activeIndex - 6) * 32//实现滚动
+      console.log(activedP)
+      if(this.activeIndex > 5)
+        lyricOuter.scrollTop = (this.activeIndex - 4) * 32//实现滚动
+      if(second == undefined)
+        clearInterval(gdtimer)
       }
+      
     , 50)
     }
   }
@@ -92,7 +98,7 @@ export default {
 
 <style>
 .lyric-outer {
-  height: 300px;
+  height: 900px;
   overflow: scroll;
   text-align: center;
   line-height: 2;

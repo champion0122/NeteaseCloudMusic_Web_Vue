@@ -1,8 +1,13 @@
 <template>
   <div id="app">
-    <div class="main-content">
+    <div class="main-content" >
       <nav-bar/>
-      <router-view />
+      <div>
+        <router-view />
+        </div>
+    </div>
+    <div class="main-content" >
+      <Comments/>
     </div>
     <player-bar></player-bar>
   </div>
@@ -11,12 +16,14 @@
 <script>
 import NavBar from "@/components/NavBar"
 import PlayerBar from "@/components/player/PlayerBar"
+import Comments from "@/components/Comments"
 
 export default {
   name: 'app',
   components: {
     NavBar,
-    PlayerBar
+    PlayerBar,
+    Comments
   },
 
 }
